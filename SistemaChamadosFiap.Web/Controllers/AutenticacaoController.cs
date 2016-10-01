@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using SistemaChamadosFiap.Web.Models;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -72,11 +73,14 @@ namespace SistemaChamadosFiap.Web.Controllers
                 {
                     using (var manager = new UserManager<IdentityUser>(store))
                     {
-                        var usuario = new IdentityUser(model.Login);
-                        IdentityResult resultado = await manager.CreateAsync(usuario, model.Senha);
 
-                        if (resultado.Succeeded)                       
-                            return await Login(new LoginModel() { Login = model.Login, Senha = model.Senha });                        
+                        var usuario = new IdentityUser(model.Login);
+
+                        IdentityResult resultado = await manager.CreateAsync(usuario, model.Senha);
+                        await manager.AddClaimAsync(usuario.Id, new Claim(ClaimTypes.Role, "Usuario"));
+
+                        if (resultado.Succeeded)
+                            return await Login(new LoginModel() { Login = model.Login, Senha = model.Senha });
                         else
                             ModelState.AddModelError("", resultado.Errors.FirstOrDefault());
                     }
