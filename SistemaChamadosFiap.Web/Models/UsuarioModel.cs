@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
 namespace SistemaChamadosFiap.Web.Models
 {
-    /// <summary>
-    /// Classe model de Login.
-    /// </summary>
-    public class LoginModel
+    public class UsuarioModel
     {
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -20,5 +16,10 @@ namespace SistemaChamadosFiap.Web.Models
         [Required]
         [DataType(DataType.Password)]
         public string Senha { get; set; }
+
+        [Required]
+        [Compare("Senha")]
+        [DataType(DataType.Password)]
+        public string Confirma { get; set; }
     }
 }
