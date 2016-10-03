@@ -14,8 +14,17 @@ namespace SistemaChamadosFiap.Data
     
     public partial class tbCliente
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tbCliente()
+        {
+            this.tbChamadoes = new HashSet<tbChamado>();
+        }
+    
         public int Id { get; set; }
         public string Nome { get; set; }
         public bool Ativo { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbChamado> tbChamadoes { get; set; }
     }
 }

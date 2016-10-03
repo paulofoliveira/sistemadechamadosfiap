@@ -15,7 +15,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.DtAbertura)
-
+        @Html.HiddenFor(model => model.IdCliente)
         <div class="form-group">
             @Html.LabelFor(model => model.Titulo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -27,7 +27,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DtAbertura, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DisplayFor(model => model.DtAbertura, new { htmlAttributes = new { @class = "form-control" } })
+                <p class="form-control-static">@Model.DtAbertura.ToString("dd/MM/yyyy HH:mm:ss")</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <p class="form-control-static">@((StatusTipo)Model.Status)</p>
             </div>
         </div>
 
@@ -38,16 +45,16 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Atualizar" class="btn btn-primary" />
+                <input type="submit" value="Atualizar chamado" class="btn btn-primary" />
                 @if (ClaimsPrincipal.Current.HasClaimRole("Cliente"))
                 {
                     if (Model.Status != (byte)StatusTipo.Finalizado)
                     {
-                        @Html.ActionLink("Finalizar chamado", "EncerrarChamado", new { id = Model.Id }, new { @class = "btn btn-success" })
+                        @Html.ActionLink("Finalizar chamado", "EncerrarChamado", new { id = Model.Id }, new { id="btn-finalizar", @class = "btn btn-success" })
                     }
                     else
                     {
-                        @Html.ActionLink("Reabrir chamado", "ReabirChamado", new { id = Model.Id }, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("Reabrir chamado", "ReabrirChamado", new { id = Model.Id }, new { id = "btn-reabrir", @class = "btn btn-warning" })
                     }
                 }
             </div>

@@ -36,5 +36,8 @@ namespace SistemaChamadosFiap.Web.Models
         
         [UIHint("Interacoes")]
         public IEnumerable<ChamadoInteracaoModel> Interacoes { get; set; }
+
+        [Required]
+        public int IdCliente { get; set; }
     }
 }

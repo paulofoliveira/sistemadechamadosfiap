@@ -13,7 +13,7 @@ namespace SistemaChamadosFiap.Web.Controllers
     public class AtendenteController : BaseController<tbAtendente, AtendenteModel>
     {
         [HttpGet]
-        public override Task<ActionResult> Index()
+        public override ActionResult Index()
         {
             return base.Index();
         }

@@ -9,7 +9,7 @@ namespace SistemaChamadosFiap.Web.Controllers
     public class ClienteController : BaseController<tbCliente, ClienteModel>
     {
         [HttpGet]
-        public override Task<ActionResult> Index()
+        public override ActionResult Index()
         {
             return base.Index();
         }

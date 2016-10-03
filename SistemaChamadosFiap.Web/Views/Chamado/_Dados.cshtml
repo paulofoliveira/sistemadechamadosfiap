@@ -1,0 +1,42 @@
+﻿@model IEnumerable<tbChamado>
+
+<table class="table">
+    <tr>
+        <th>
+            Título
+        </th>
+        <th>
+            Prioridade
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Abertura
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                @((PrioridadeTipo)item.Prioridade)
+            </td>
+            <td>
+                @((StatusTipo)item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DtAbertura)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Editar", new { id = item.Id }) |
+                @Html.ActionLink("Excluir", "Excluir", new { id = item.Id }, new { @class = "chamado-remove" })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -22,6 +22,7 @@
           <Property Name="Prioridade" Type="tinyint" Nullable="false" />
           <Property Name="Status" Type="tinyint" Nullable="false" />
           <Property Name="DtAbertura" Type="datetime" Nullable="false" />
+          <Property Name="IdCliente" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tbChamadoInteracao">
           <Key>
@@ -41,6 +42,18 @@
           <Property Name="Nome" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
         </EntityType>
+        <Association Name="FK_tbChamado_tbCliente">
+          <End Role="tbCliente" Type="Self.tbCliente" Multiplicity="1" />
+          <End Role="tbChamado" Type="Self.tbChamado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbCliente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbChamado">
+              <PropertyRef Name="IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tbChamadoInteracao_tbChamado">
           <End Role="tbChamado" Type="Self.tbChamado" Multiplicity="1" />
           <End Role="tbChamadoInteracao" Type="Self.tbChamadoInteracao" Multiplicity="*" />
@@ -58,6 +71,10 @@
           <EntitySet Name="tbChamado" EntityType="Self.tbChamado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbChamadoInteracao" EntityType="Self.tbChamadoInteracao" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbCliente" EntityType="Self.tbCliente" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbChamado_tbCliente" Association="Self.FK_tbChamado_tbCliente">
+            <End Role="tbCliente" EntitySet="tbCliente" />
+            <End Role="tbChamado" EntitySet="tbChamado" />
+          </AssociationSet>
           <AssociationSet Name="FK_tbChamadoInteracao_tbChamado" Association="Self.FK_tbChamadoInteracao_tbChamado">
             <End Role="tbChamado" EntitySet="tbChamado" />
             <End Role="tbChamadoInteracao" EntitySet="tbChamadoInteracao" />
@@ -85,6 +102,8 @@
           <Property Name="Status" Type="Byte" Nullable="false" />
           <Property Name="DtAbertura" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="tbChamadoInteracaos" Relationship="Self.FK_tbChamadoInteracao_tbChamado" FromRole="tbChamado" ToRole="tbChamadoInteracao" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbCliente" Relationship="SistemaChamadosFiapModel.FK_tbChamado_tbCliente" FromRole="tbChamado" ToRole="tbCliente" />
         </EntityType>
         <EntityType Name="tbChamadoInteracao">
           <Key>
@@ -104,6 +123,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tbChamadoes" Relationship="SistemaChamadosFiapModel.FK_tbChamado_tbCliente" FromRole="tbCliente" ToRole="tbChamado" />
         </EntityType>
         <Association Name="FK_tbChamadoInteracao_tbChamado">
           <End Role="tbChamado" Type="Self.tbChamado" Multiplicity="1" />
@@ -126,7 +146,23 @@
             <End Role="tbChamado" EntitySet="tbChamadoes" />
             <End Role="tbChamadoInteracao" EntitySet="tbChamadoInteracaos" />
           </AssociationSet>
+          <AssociationSet Name="FK_tbChamado_tbCliente" Association="SistemaChamadosFiapModel.FK_tbChamado_tbCliente">
+            <End Role="tbCliente" EntitySet="tbClientes" />
+            <End Role="tbChamado" EntitySet="tbChamadoes" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_tbChamado_tbCliente">
+          <End Type="SistemaChamadosFiapModel.tbCliente" Role="tbCliente" Multiplicity="1" />
+          <End Type="SistemaChamadosFiapModel.tbChamado" Role="tbChamado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbCliente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbChamado">
+              <PropertyRef Name="IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -145,6 +181,7 @@
           <EntitySetMapping Name="tbChamadoes">
             <EntityTypeMapping TypeName="SistemaChamadosFiapModel.tbChamado">
               <MappingFragment StoreEntitySet="tbChamado">
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Titulo" ColumnName="Titulo" />
                 <ScalarProperty Name="Prioridade" ColumnName="Prioridade" />

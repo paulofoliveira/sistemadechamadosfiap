@@ -18,7 +18,7 @@
         @Html.HiddenFor(model => model.Mensagem)
         @Html.HiddenFor(model => model.Usuario)
     }
-    <button title="Remover" type="button" class="btn-default btn-xs pull-right interacao-remove"><i class="fa fa-trash"></i></button>
+    <button title="Remover" type="button" class="btn-danger btn-xs pull-right interacao-remove"><i class="fa fa-trash-o"></i></button>
     <strong>@Model.Usuario em: @Model.DtInteracao.ToString("dd/MM/yyyy HH:mm:ss")</strong><br />
     @Html.Raw(Model.Mensagem)
 </div>

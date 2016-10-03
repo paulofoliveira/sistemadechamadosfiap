@@ -10,46 +10,28 @@
 <p>
     @Html.ActionLink("Novo chamado", "Adicionar")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            Título
-        </th>
-        <th>
-            Prioridade
-        </th>
-        <th>
-            Status
-        </th>
-        <th>
-            Abertura
-        </th>
-        <th></th>
-    </tr>
+<div class="row">
+    <div class="form-group">
+        <label class="control-label col-md-2">Status</label>
+        <div class="col-md-10">
+            @Html.DropDownList("statusSelect", ViewBag.Status as SelectList, "Selecione ...", new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="chamado-list">
+    </div>
+</div>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @((PrioridadeTipo)item.Prioridade)
-            </td>
-            <td>
-                @((StatusTipo)item.Status)        
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DtAbertura)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Editar", new { id = item.Id }) |
-                @Html.ActionLink("Excluir", "Excluir", new { id = item.Id }, new { @class = "chamado-remove" })
-            </td>
-        </tr>
-    }
+@section head
+{
+    <style>
+        #chamado-list {
+            margin: 20px 0;
+        }
+    </style>
+}
 
-</table>
 
 @section scripts
 {
@@ -61,8 +43,21 @@
                 if (!confirm("Deseja excluir um chamado?")) {
                     e.preventDefault();
                 }
-          
+
             });
+
+            $("#statusSelect").change(function () {
+                var url = "/Chamado/CarregarDadosIndex",
+                    $element = $(this);
+
+                if ($element.val())
+                    url += "?&status=" + $element.val();
+
+                $.get(url, function (response) {
+                    $("#chamado-list").html(response);
+                });
+            }).trigger("change");
+
 
         });
 

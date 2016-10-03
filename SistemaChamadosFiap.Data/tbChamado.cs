@@ -25,8 +25,10 @@ namespace SistemaChamadosFiap.Data
         public byte Prioridade { get; set; }
         public byte Status { get; set; }
         public System.DateTime DtAbertura { get; set; }
+        public int IdCliente { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbChamadoInteracao> tbChamadoInteracaos { get; set; }
+        public virtual tbCliente tbCliente { get; set; }
     }
 }

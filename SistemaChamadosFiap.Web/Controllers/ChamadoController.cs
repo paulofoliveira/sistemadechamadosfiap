@@ -1,5 +1,6 @@
 ﻿using SistemaChamadosFiap.Data;
 using SistemaChamadosFiap.Data.Enumerations;
+using SistemaChamadosFiap.Web.Infrastructure;
 using SistemaChamadosFiap.Web.Infrastructure.Extensions;
 using SistemaChamadosFiap.Web.Models;
 using System;
@@ -17,7 +18,7 @@ namespace SistemaChamadosFiap.Web.Controllers
     public class ChamadoController : BaseController<tbChamado, ChamadoModel>
     {
         [HttpGet]
-        public override Task<ActionResult> Index()
+        public override ActionResult Index()
         {
             return base.Index();
         }
@@ -58,8 +59,8 @@ namespace SistemaChamadosFiap.Web.Controllers
         public ActionResult ModalInteracao(ChamadoInteracaoModel model)
         {
             if (ModelState.IsValid)
-            {            
-                model.Id = 0;      
+            {
+                model.Id = 0;
                 model.DtInteracao = DateTime.Now;
                 ViewBag.PropertyCollectionName = "Interacoes";
                 return PartialView("~/Views/Chamado/EditorTemplates/ChamadoInteracaoModel.cshtml", model);
@@ -68,26 +69,23 @@ namespace SistemaChamadosFiap.Web.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
         }
 
-        public override void AtualizarEntidadeAntesDeSalvar(DbContext db, tbChamado atualizado)
+        public override void AtualizarEntidadeAntesDeSalvar(tbChamado atualizado)
         {
             foreach (var interacao in atualizado.tbChamadoInteracaos)
             {
                 if (interacao.Id == 0)
-                    db.Entry(interacao).State = EntityState.Added;
+                    _db.Entry(interacao).State = EntityState.Added;
             }
         }
 
         public async Task<ActionResult> ExcluirInteracao(int id)
         {
-            using (SistemaChamadosFiapEntities db = new SistemaChamadosFiapEntities())
-            {
-                var dbSet = db.Set<tbChamadoInteracao>();
-                var interacao = await dbSet.FindAsync(id);
-                if (interacao == null) return HttpNotFound();
-                dbSet.Remove(interacao);
-                await db.SaveChangesAsync();
-                return new HttpStatusCodeResult(HttpStatusCode.OK);
-            }
+            var dbSet = _db.Set<tbChamadoInteracao>();
+            var interacao = await dbSet.FindAsync(id);
+            if (interacao == null) return HttpNotFound();
+            dbSet.Remove(interacao);
+            await _db.SaveChangesAsync();
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         public override void CarregarAdicionar(ChamadoModel model)
@@ -112,42 +110,76 @@ namespace SistemaChamadosFiap.Web.Controllers
             CarregarViewBagsPadrao();
         }
 
-        public override void AntesExcluir(DbContext db, tbChamado chamado)
+        public override void AntesExcluir(tbChamado chamado)
         {
             foreach (var interacao in chamado.tbChamadoInteracaos.ToList())
-                db.Set<tbChamadoInteracao>().Remove(interacao);
+                _db.Set<tbChamadoInteracao>().Remove(interacao);
         }
 
         [HttpGet]
         public async Task<ActionResult> EncerrarChamado(int id)
         {
-            using (SistemaChamadosFiapEntities db = new SistemaChamadosFiapEntities())
-            {
-                var chamado = await db.tbChamadoes.FindAsync(id);
-                if (chamado == null) return HttpNotFound();
+            var chamado = await _db.Set<tbChamado>().FindAsync(id);
+            if (chamado == null) return HttpNotFound();
 
-                chamado.Status = (byte)StatusTipo.Finalizado;
-                db.Entry(chamado).State = EntityState.Modified;
+            chamado.Status = (byte)StatusTipo.Finalizado;
+            _db.Entry(chamado).State = EntityState.Modified;
 
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
 
         [HttpGet]
         public async Task<ActionResult> ReabrirChamado(int id)
         {
-            using (SistemaChamadosFiapEntities db = new SistemaChamadosFiapEntities())
+            var chamado = await _db.Set<tbChamado>().FindAsync(id);
+            if (chamado == null) return HttpNotFound();
+
+            chamado.Status = (byte)StatusTipo.Aguardando;
+            _db.Entry(chamado).State = EntityState.Modified;
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        public override void CarregarIndex()
+        {
+            ViewBag.Status = new SelectList(Enum.GetValues(typeof(StatusTipo)).Cast<StatusTipo>().ToDictionary(t => (byte)t, t => t.ToString()), "Key", "Value");
+        }
+
+        public override IQueryable<tbChamado> Query
+        {
+            get
             {
-                var chamado = await db.tbChamadoes.FindAsync(id);
-                if (chamado == null) return HttpNotFound();
+                if (ClaimsPrincipal.Current.HasClaimRole("Administrador")
+                    || ClaimsPrincipal.Current.HasClaimRole("Atendente"))
+                    return base.Query;
 
-                chamado.Status = (byte)StatusTipo.Aguardando;
-                db.Entry(chamado).State = EntityState.Modified;
+                var claimCliente = ClaimsPrincipal.Current.FindFirst(p => p.Type == CustomClaimTypes.ClientId);
+                if (claimCliente == null) throw new Exception("Erro ao recuperar Claim.");
+                int idCliente = 0;
+                if (!int.TryParse(claimCliente.Value, out idCliente)) throw new Exception("Erro ao converter Claim.");
 
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return base.Query.Where(p => p.IdCliente == idCliente);
+            }
+        }
+
+        public override ActionResult CarregarDadosIndex()
+        {
+            if (Request.QueryString["status"] == null)
+                return base.CarregarDadosIndex();
+
+            byte status = Convert.ToByte(Request.QueryString["status"]);
+
+            return PartialView("_Dados", Query.Where(p => p.Status == status));
+        }
+
+        public override void AntesDeSalvar(tbChamado chamado)
+        {
+            if (chamado.Id == 0)
+            {
+                chamado.IdCliente = 1; //Convert.ToInt32(ClaimsPrincipal.Current.FindFirst(p => p.Type == CustomClaimTypes.ClientId).Value);
             }
         }
     }

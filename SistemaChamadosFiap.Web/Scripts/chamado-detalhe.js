@@ -25,13 +25,23 @@ $(document).ready(function () {
                     }
                 });
             }
-            else
-            {
+            else {
                 $interacaoDetail.remove();
             }
         }
 
         e.preventDefault();
     });
+
+    $("#btn-finalizar").click(function (e) {
+        if (!confirm("Deseja realmente finalizar o chamado?"))
+            e.preventDefault();
+    });
+
+    $("#btn-reabrir").click(function (e) {
+        if (!confirm("Deseja realmente reabrir o chamado?"))
+            e.preventDefault();
+    });
+
 
 });

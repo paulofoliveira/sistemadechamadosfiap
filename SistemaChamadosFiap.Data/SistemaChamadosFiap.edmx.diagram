@@ -10,6 +10,7 @@
         <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbChamadoInteracao" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbCliente" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="SistemaChamadosFiapModel.FK_tbChamadoInteracao_tbChamado" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaChamadosFiapModel.FK_tbChamado_tbCliente" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

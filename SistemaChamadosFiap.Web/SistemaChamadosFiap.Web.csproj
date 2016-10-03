@@ -197,6 +197,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\CustomClaimTypes.cs" />
     <Compile Include="Infrastructure\Extensions\ClaimsExtensions.cs" />
     <Compile Include="Models\AtendenteModel.cs" />
     <Compile Include="Models\ChamadoInteracaoModel.cs" />
@@ -231,6 +232,7 @@
     <Content Include="Views\Chamado\EditorTemplates\Interacoes.cshtml" />
     <Content Include="Views\Chamado\EditorTemplates\ChamadoInteracaoModel.cshtml" />
     <Content Include="Views\Chamado\ModalInteracao.cshtml" />
+    <Content Include="Views\Chamado\_Dados.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
