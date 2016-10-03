@@ -3,10 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@("Sistema de chamados FIAP" + ViewBag.Title != null ? " - " + ViewBag.Title : "")</title>
+    <title>@("Sistema de chamados FIAP" + (ViewBag.Title != null ? " - " + ViewBag.Title : ""))</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+    @RenderSection("head", false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">

@@ -1,0 +1,76 @@
+﻿@model ChamadoModel
+
+@{
+    ViewBag.Title = "Editar chamado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.DtAbertura)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Titulo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Titulo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DtAbertura, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.DtAbertura, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <h3><button title="Nova interação" type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#interacao-modal"><i class="fa fa-plus"></i></button> Interações</h3>
+        <div class="form-group">
+            @Html.EditorFor(model => model.Interacoes)
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Atualizar" class="btn btn-primary" />
+                @if (ClaimsPrincipal.Current.HasClaimRole("Cliente"))
+                {
+                    if (Model.Status != (byte)StatusTipo.Finalizado)
+                    {
+                        @Html.ActionLink("Finalizar chamado", "EncerrarChamado", new { id = Model.Id }, new { @class = "btn btn-success" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Reabrir chamado", "ReabirChamado", new { id = Model.Id }, new { @class = "btn btn-warning" })
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@Html.Action("ModalInteracao")
+
+<div>
+    @Html.ActionLink("Voltar", "Index")
+</div>
+
+
+@section head
+{
+    <link href="~/Content/chamado-detalhe.css" rel="stylesheet" />
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/chamado-detalhe.js"></script>
+}

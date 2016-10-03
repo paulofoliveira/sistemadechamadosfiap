@@ -4,12 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7706b2beec8b4412b46f4eb5568cdeff" Name="Diagram1">
-        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbAtendente" Width="2" PointX="3.625" PointY="4.25" />
-        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbChamado" Width="2" PointX="0.75" PointY="0.875" />
-        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbChamadoInteracao" Width="2" PointX="3.875" PointY="1.25" />
-        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbCliente" Width="2" PointX="6.875" PointY="3" />
-        <AssociationConnector Association="SistemaChamadosFiapModel.FK_tbChamadoInteracao_tbChamado" />
+      <Diagram DiagramId="673c5f5e77dd450586bdb98eea4df732" Name="Diagram1">
+        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbAtendente" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbChamado" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbChamadoInteracao" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaChamadosFiapModel.tbCliente" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="SistemaChamadosFiapModel.FK_tbChamadoInteracao_tbChamado" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

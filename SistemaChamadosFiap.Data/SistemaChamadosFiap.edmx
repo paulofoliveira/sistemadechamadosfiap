@@ -30,6 +30,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Mensagem" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IdChamado" Type="int" Nullable="false" />
+          <Property Name="DtInteracao" Type="datetime" Nullable="false" />
+          <Property Name="Usuario" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="tbCliente">
           <Key>
@@ -65,22 +67,12 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SistemaChamadosFiapModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="SistemaChamadosFiapEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="tbAtendentes" EntityType="SistemaChamadosFiapModel.tbAtendente" />
-          <EntitySet Name="tbChamadoes" EntityType="SistemaChamadosFiapModel.tbChamado" />
-          <EntitySet Name="tbChamadoInteracaos" EntityType="SistemaChamadosFiapModel.tbChamadoInteracao" />
-          <EntitySet Name="tbClientes" EntityType="SistemaChamadosFiapModel.tbCliente" />
-          <AssociationSet Name="FK_tbChamadoInteracao_tbChamado" Association="SistemaChamadosFiapModel.FK_tbChamadoInteracao_tbChamado">
-            <End Role="tbChamado" EntitySet="tbChamadoes" />
-            <End Role="tbChamadoInteracao" EntitySet="tbChamadoInteracaos" />
-          </AssociationSet>
-        </EntityContainer>
         <EntityType Name="tbAtendente">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="tbChamado">
@@ -88,32 +80,34 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Titulo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Titulo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Prioridade" Type="Byte" Nullable="false" />
           <Property Name="Status" Type="Byte" Nullable="false" />
           <Property Name="DtAbertura" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="tbChamadoInteracaos" Relationship="SistemaChamadosFiapModel.FK_tbChamadoInteracao_tbChamado" FromRole="tbChamado" ToRole="tbChamadoInteracao" />
+          <NavigationProperty Name="tbChamadoInteracaos" Relationship="Self.FK_tbChamadoInteracao_tbChamado" FromRole="tbChamado" ToRole="tbChamadoInteracao" />
         </EntityType>
         <EntityType Name="tbChamadoInteracao">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Mensagem" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Mensagem" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IdChamado" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="tbChamado" Relationship="SistemaChamadosFiapModel.FK_tbChamadoInteracao_tbChamado" FromRole="tbChamadoInteracao" ToRole="tbChamado" />
+          <NavigationProperty Name="tbChamado" Relationship="Self.FK_tbChamadoInteracao_tbChamado" FromRole="tbChamadoInteracao" ToRole="tbChamado" />
+          <Property Name="DtInteracao" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tbCliente">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_tbChamadoInteracao_tbChamado">
-          <End Type="SistemaChamadosFiapModel.tbChamado" Role="tbChamado" Multiplicity="1" />
-          <End Type="SistemaChamadosFiapModel.tbChamadoInteracao" Role="tbChamadoInteracao" Multiplicity="*" />
+          <End Role="tbChamado" Type="Self.tbChamado" Multiplicity="1" />
+          <End Role="tbChamadoInteracao" Type="Self.tbChamadoInteracao" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tbChamado">
               <PropertyRef Name="Id" />
@@ -123,52 +117,65 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="SistemaChamadosFiapEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbAtendentes" EntityType="Self.tbAtendente" />
+          <EntitySet Name="tbChamadoes" EntityType="Self.tbChamado" />
+          <EntitySet Name="tbChamadoInteracaos" EntityType="Self.tbChamadoInteracao" />
+          <EntitySet Name="tbClientes" EntityType="Self.tbCliente" />
+          <AssociationSet Name="FK_tbChamadoInteracao_tbChamado" Association="Self.FK_tbChamadoInteracao_tbChamado">
+            <End Role="tbChamado" EntitySet="tbChamadoes" />
+            <End Role="tbChamadoInteracao" EntitySet="tbChamadoInteracaos" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="SistemaChamadosFiapModelStoreContainer" CdmEntityContainer="SistemaChamadosFiapEntities">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SistemaChamadosFiapModelStoreContainer" CdmEntityContainer="SistemaChamadosFiapEntities">
           <EntitySetMapping Name="tbAtendentes">
             <EntityTypeMapping TypeName="SistemaChamadosFiapModel.tbAtendente">
               <MappingFragment StoreEntitySet="tbAtendente">
-                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
-                <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbChamadoes">
             <EntityTypeMapping TypeName="SistemaChamadosFiapModel.tbChamado">
               <MappingFragment StoreEntitySet="tbChamado">
-                <ScalarProperty Name="DtAbertura" ColumnName="DtAbertura" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Prioridade" ColumnName="Prioridade" />
-                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Prioridade" ColumnName="Prioridade" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DtAbertura" ColumnName="DtAbertura" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbChamadoInteracaos">
             <EntityTypeMapping TypeName="SistemaChamadosFiapModel.tbChamadoInteracao">
               <MappingFragment StoreEntitySet="tbChamadoInteracao">
-                <ScalarProperty Name="IdChamado" ColumnName="IdChamado" />
-                <ScalarProperty Name="Mensagem" ColumnName="Mensagem" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="DtInteracao" ColumnName="DtInteracao" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Mensagem" ColumnName="Mensagem" />
+                <ScalarProperty Name="IdChamado" ColumnName="IdChamado" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tbClientes">
             <EntityTypeMapping TypeName="SistemaChamadosFiapModel.tbCliente">
               <MappingFragment StoreEntitySet="tbCliente">
-                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
-                <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
         </EntityContainerMapping>
-</Mapping></edmx:Mappings>
+      </Mapping>
+    </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -182,7 +189,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

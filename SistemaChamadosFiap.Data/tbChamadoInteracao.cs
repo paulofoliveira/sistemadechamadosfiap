@@ -17,6 +17,8 @@ namespace SistemaChamadosFiap.Data
         public int Id { get; set; }
         public string Mensagem { get; set; }
         public int IdChamado { get; set; }
+        public System.DateTime DtInteracao { get; set; }
+        public string Usuario { get; set; }
     
         public virtual tbChamado tbChamado { get; set; }
     }

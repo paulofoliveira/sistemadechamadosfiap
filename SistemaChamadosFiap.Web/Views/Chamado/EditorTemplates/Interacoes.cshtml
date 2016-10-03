@@ -1,0 +1,11 @@
+﻿@model IEnumerable<ChamadoInteracaoModel>
+
+<div id="interacao-list">
+    @foreach (var interacao in Model.OrderByDescending(p => p.DtInteracao))
+    {
+        using (Html.BeginCollectionItem("Interacoes"))
+        {
+            @Html.EditorFor(model => interacao, "", "")
+        }
+    }
+</div>

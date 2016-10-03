@@ -1,21 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SistemaChamadosFiap.Web.Models
 {
-    public class ChamadoModel
+    /// <summary>
+    /// Classe Model de Chamado.
+    /// </summary>
+    public class ChamadoModel : BaseModel
     {
         public ChamadoModel()
         {
+            DtAbertura = DateTime.Now;
             Interacoes = new List<ChamadoInteracaoModel>();
         }
 
-        public int Id { get; set; }
+        [Required]
+        [Display(Name = "Título")]
         public string Titulo { get; set; }
-        public DateTime DtAbertura { get; set; }
+
+
+        [Required]
+        [Display(Name = "Abertura")]
+        [DataType(DataType.DateTime)]
+        public DateTime DtAbertura { get; set; }  
+
+        [Required]
+        public byte Status { get; set; }
+
+        [Required]
+        public byte Prioridade { get; set; }
+        
+        [UIHint("Interacoes")]
         public IEnumerable<ChamadoInteracaoModel> Interacoes { get; set; }
     }
 }

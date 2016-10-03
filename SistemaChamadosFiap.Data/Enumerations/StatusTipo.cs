@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SistemaChamadosFiap.Data.Enumerations
 {
-    public enum PrioridadeTipo : byte
-    {
-        Simples = 0,
-        Moderado = 1,
-        Grave = 2
+    public enum StatusTipo : byte
+    {        
+        Aguardando = 0,
+        Pendente = 1,
+        Finalizado = 2
     }
 }

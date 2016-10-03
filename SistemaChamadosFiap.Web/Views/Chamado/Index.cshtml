@@ -1,0 +1,70 @@
+﻿@model IEnumerable<tbChamado>
+
+@{
+    ViewBag.Title = "Chamados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Novo chamado", "Adicionar")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Título
+        </th>
+        <th>
+            Prioridade
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Abertura
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                @((PrioridadeTipo)item.Prioridade)
+            </td>
+            <td>
+                @((StatusTipo)item.Status)        
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DtAbertura)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Editar", new { id = item.Id }) |
+                @Html.ActionLink("Excluir", "Excluir", new { id = item.Id }, new { @class = "chamado-remove" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            $(".chamado-remove").click(function (e) {
+
+                if (!confirm("Deseja excluir um chamado?")) {
+                    e.preventDefault();
+                }
+          
+            });
+
+        });
+
+    </script>
+}

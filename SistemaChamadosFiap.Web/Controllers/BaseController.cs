@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SistemaChamadosFiap.Data;
+using SistemaChamadosFiap.Web.Models;
 using System;
 using System.Data.Entity;
 using System.Threading.Tasks;
@@ -12,9 +13,10 @@ namespace SistemaChamadosFiap.Web.Controllers
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
     public class BaseController<TEntity, TModel> : Controller
-        where TModel : class
+        where TModel : BaseModel
         where TEntity : class
     {
+       
 
         [HttpGet]
         public virtual async Task<ActionResult> Index()
@@ -29,7 +31,19 @@ namespace SistemaChamadosFiap.Web.Controllers
         [HttpGet]
         public virtual ActionResult Adicionar()
         {
-            return View(Activator.CreateInstance<TModel>());
+            TModel model = Activator.CreateInstance<TModel>();
+            CarregarAdicionar(model);
+            return View(model);
+        }
+
+        public virtual void CarregarAdicionar(TModel model)
+        {
+            
+        }
+
+        public virtual void CarregarEditar(TModel model)
+        {
+
         }
 
         [HttpPost]
@@ -46,15 +60,17 @@ namespace SistemaChamadosFiap.Web.Controllers
                         db.Set<TEntity>().Add(entidade);
                         await db.SaveChangesAsync();
                     }
+
+                    return RedirectToAction("Index");
                 }
 
-                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
             }
 
+            CarregarAdicionar(model);
             return View(model);
         }
 
@@ -68,35 +84,42 @@ namespace SistemaChamadosFiap.Web.Controllers
                 if (entidade == null) return HttpNotFound();
 
                 var model = Mapper.Map<TModel>(entidade);
+                CarregarEditar(model);
                 return View(model);
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         public virtual async Task<ActionResult> Editar(TModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    TEntity entidade = Mapper.Map<TEntity>(model);
+                    TEntity atualizado = Mapper.Map<TEntity>(model);
 
                     using (SistemaChamadosFiapEntities db = new SistemaChamadosFiapEntities())
-                    {
-                        db.Set<TEntity>().Attach(entidade);
-                        db.Entry(entidade).State = EntityState.Modified;
+                    {           
+                        db.Set<TEntity>().Attach(atualizado);
+                        db.Entry(atualizado).State = EntityState.Modified;
+                        AtualizarEntidadeAntesDeSalvar(db, atualizado);
                         await db.SaveChangesAsync();
                     }
-                }
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
             }
 
+            CarregarEditar(model);
             return View(model);
+        }
+
+        public virtual void AtualizarEntidadeAntesDeSalvar(DbContext db, TEntity atualizado)
+        {
 
         }
 
@@ -107,9 +130,16 @@ namespace SistemaChamadosFiap.Web.Controllers
                 var entidade = await db.Set<TEntity>().FindAsync(id);
 
                 if (entidade == null) return HttpNotFound();
+                AntesExcluir(db, entidade);
                 db.Set<TEntity>().Remove(entidade);
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
-            }   
+            }
+        }
+
+        public virtual void AntesExcluir(DbContext db, TEntity entidade)
+        {
+
         }
     }
 }

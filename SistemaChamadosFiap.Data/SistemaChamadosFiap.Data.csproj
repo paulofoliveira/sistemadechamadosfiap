@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enumerations\PrioridadeTipo.cs" />
+    <Compile Include="Enumerations\StatusTipo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SistemaChamadosFiap.Context.cs">
       <AutoGen>True</AutoGen>
@@ -81,36 +83,34 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FullScript.sql" />
-    <Content Include="SistemaChamadosFiap.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SistemaChamadosFiap.Context.cs</LastGenOutput>
-      <DependentUpon>SistemaChamadosFiap.edmx</DependentUpon>
-    </Content>
-    <Content Include="SistemaChamadosFiap.edmx.sql" />
-    <Content Include="SistemaChamadosFiap.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SistemaChamadosFiap.edmx</DependentUpon>
-      <LastGenOutput>SistemaChamadosFiap.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="SistemaChamadosFiap.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>SistemaChamadosFiap.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="SistemaChamadosFiap.edmx.diagram">
       <DependentUpon>SistemaChamadosFiap.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SistemaChamadosFiap.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SistemaChamadosFiap.edmx</DependentUpon>
+      <LastGenOutput>SistemaChamadosFiap.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="SistemaChamadosFiap.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SistemaChamadosFiap.edmx</DependentUpon>
+      <LastGenOutput>SistemaChamadosFiap.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

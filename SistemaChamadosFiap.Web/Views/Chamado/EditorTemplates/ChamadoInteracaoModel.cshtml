@@ -1,0 +1,24 @@
+﻿@model ChamadoInteracaoModel
+
+<div class="interacao-detail" data-id="@Model.Id">
+    @if (ViewBag.PropertyCollectionName != null)
+    {
+        using (Html.BeginCollectionItem((string)ViewBag.PropertyCollectionName))
+        {
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.DtInteracao)
+            @Html.HiddenFor(model => model.Mensagem)
+            @Html.HiddenFor(model => model.Usuario)
+        }
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.DtInteracao)
+        @Html.HiddenFor(model => model.Mensagem)
+        @Html.HiddenFor(model => model.Usuario)
+    }
+    <button title="Remover" type="button" class="btn-default btn-xs pull-right interacao-remove"><i class="fa fa-trash"></i></button>
+    <strong>@Model.Usuario em: @Model.DtInteracao.ToString("dd/MM/yyyy HH:mm:ss")</strong><br />
+    @Html.Raw(Model.Mensagem)
+</div>
