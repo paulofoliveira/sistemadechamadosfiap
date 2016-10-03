@@ -5,35 +5,35 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
-
+<h2>@ViewBag.Title</h2>
 <p>
     @Html.ActionLink("Adicionar", "Adicionar")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Ativo)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Ativo)
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Editar", new { id=item.Id }) |
-            @Html.ActionLink("Excluir", "Excluir", new { id=item.Id })
-        </td>
-    </tr>
+<div class="row">
+    <div id="atendente-list">
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            $(".atendente-remove").click(function (e) {
+
+                if (!confirm("Deseja excluir o atendente?")) {
+                    e.preventDefault();
+                }
+
+            });
+
+            $.get("/Atendente/CarregarDadosIndex", function (response) {
+                $("#atendente-list").html(response);
+            });
+
+
+        });
+
+    </script>
 }
-
-</table>

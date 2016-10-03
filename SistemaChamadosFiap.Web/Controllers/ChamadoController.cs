@@ -179,7 +179,7 @@ namespace SistemaChamadosFiap.Web.Controllers
         {
             if (chamado.Id == 0)
             {
-                chamado.IdCliente = 1; //Convert.ToInt32(ClaimsPrincipal.Current.FindFirst(p => p.Type == CustomClaimTypes.ClientId).Value);
+                chamado.IdCliente = Convert.ToInt32(ClaimsPrincipal.Current.FindFirst(p => p.Type == CustomClaimTypes.ClientId).Value);
             }
         }
     }

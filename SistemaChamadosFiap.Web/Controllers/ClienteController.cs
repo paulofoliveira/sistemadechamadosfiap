@@ -1,5 +1,10 @@
-﻿using SistemaChamadosFiap.Data;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using SistemaChamadosFiap.Data;
+using SistemaChamadosFiap.Web.Infrastructure;
 using SistemaChamadosFiap.Web.Models;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -48,6 +53,33 @@ namespace SistemaChamadosFiap.Web.Controllers
         public override Task<ActionResult> Excluir(int id)
         {
             return base.Excluir(id);
+        }
+
+        public override void DepoisDeSalvar(tbCliente cliente)
+        {
+            // Salva usuário do AspNetUsers.
+
+            using (var store = new UserStore<IdentityUser>())
+            {
+                using (var manager = new UserManager<IdentityUser>(store))
+                {
+                    var usuario = store.Users.FirstOrDefault(p => p.UserName == cliente.Email);
+
+                    if (usuario == null)
+                    {
+                        usuario = new IdentityUser(cliente.Email);
+
+                        IdentityResult resultado = manager.Create(usuario, cliente.Senha);
+                        manager.AddClaim(usuario.Id, new Claim(ClaimTypes.Role, "Cliente"));
+                        manager.AddClaim(usuario.Id, new Claim(CustomClaimTypes.ClientId, cliente.Id.ToString()));
+                    }
+                }
+            }
+        }
+
+        private void CriarUsuario(string login, string senha)
+        {
+
         }
     }
 }

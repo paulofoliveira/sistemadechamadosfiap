@@ -63,6 +63,8 @@ namespace SistemaChamadosFiap.Web.Controllers
                     _db.Set<TEntity>().Add(entidade);
                     await _db.SaveChangesAsync();
 
+                    DepoisDeSalvar(entidade);
+
                     return RedirectToAction("Index");
                 }
 
@@ -75,6 +77,12 @@ namespace SistemaChamadosFiap.Web.Controllers
             CarregarAdicionar(model);
             return View(model);
         }
+
+        public virtual void DepoisDeSalvar(TEntity entidade)
+        {
+           
+        }
+
         public virtual void AntesDeSalvar(TEntity entidade)
         {
 

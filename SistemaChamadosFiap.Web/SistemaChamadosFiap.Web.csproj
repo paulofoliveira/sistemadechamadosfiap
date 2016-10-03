@@ -233,6 +233,11 @@
     <Content Include="Views\Chamado\EditorTemplates\ChamadoInteracaoModel.cshtml" />
     <Content Include="Views\Chamado\ModalInteracao.cshtml" />
     <Content Include="Views\Chamado\_Dados.cshtml" />
+    <Content Include="Views\Atendente\_Dados.cshtml" />
+    <Content Include="Views\Cliente\Index.cshtml" />
+    <Content Include="Views\Cliente\_Dados.cshtml" />
+    <Content Include="Views\Cliente\Adicionar.cshtml" />
+    <Content Include="Views\Cliente\Editar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -240,9 +245,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Cliente\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SistemaChamadosFiap.Data\SistemaChamadosFiap.Data.csproj">
       <Project>{65ca8461-1c7e-429d-9c29-3a6ab72e459c}</Project>

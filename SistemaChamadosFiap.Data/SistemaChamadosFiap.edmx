@@ -12,6 +12,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nome" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Senha" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="tbChamado">
           <Key>
@@ -41,6 +43,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nome" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Senha" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <Association Name="FK_tbChamado_tbCliente">
           <End Role="tbCliente" Type="Self.tbCliente" Multiplicity="1" />
@@ -91,6 +95,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Senha" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tbChamado">
           <Key>
@@ -124,6 +130,8 @@
           <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="tbChamadoes" Relationship="SistemaChamadosFiapModel.FK_tbChamado_tbCliente" FromRole="tbCliente" ToRole="tbChamado" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Senha" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_tbChamadoInteracao_tbChamado">
           <End Role="tbChamado" Type="Self.tbChamado" Multiplicity="1" />
@@ -172,6 +180,8 @@
           <EntitySetMapping Name="tbAtendentes">
             <EntityTypeMapping TypeName="SistemaChamadosFiapModel.tbAtendente">
               <MappingFragment StoreEntitySet="tbAtendente">
+                <ScalarProperty Name="Senha" ColumnName="Senha" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="Ativo" ColumnName="Ativo" />
@@ -204,6 +214,8 @@
           <EntitySetMapping Name="tbClientes">
             <EntityTypeMapping TypeName="SistemaChamadosFiapModel.tbCliente">
               <MappingFragment StoreEntitySet="tbCliente">
+                <ScalarProperty Name="Senha" ColumnName="Senha" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="Ativo" ColumnName="Ativo" />

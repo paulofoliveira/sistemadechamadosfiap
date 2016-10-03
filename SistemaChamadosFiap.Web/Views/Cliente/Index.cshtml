@@ -1,0 +1,43 @@
+﻿@model IEnumerable<tbCliente>
+
+@{
+    ViewBag.Title = "Clientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ClaimsPrincipal.Current.HasClaimRole("Administrador"))
+{
+    <p>
+        @Html.ActionLink("Adicionar", "Adicionar")
+    </p>
+}
+<div class="row">
+    <div id="cliente-list">
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            $(".cliente-remove").click(function (e) {
+
+                if (!confirm("Deseja excluir o cliente?")) {
+                    e.preventDefault();
+                }
+
+            });
+
+            $.get("/Cliente/CarregarDadosIndex", function (response) {
+                $("#cliente-list").html(response);
+            });
+
+
+        });
+
+    </script>
+}
